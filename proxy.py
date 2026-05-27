@@ -345,13 +345,16 @@ class Handler(BaseHTTPRequestHandler):
 
     def _json(self, code, obj, close=False):
         b = json.dumps(obj).encode()
-        self.send_response(code)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(b)))
-        if close:
-            self.send_header("Connection", "close")
-        self.end_headers()
-        self.wfile.write(b)
+        try:
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(b)))
+            if close:
+                self.send_header("Connection", "close")
+            self.end_headers()
+            self.wfile.write(b)
+        except (BrokenPipeError, ConnectionResetError):
+            log("client disconnected before response (ignored)")
 
     def _err(self, code, msg):
         return self._json(code, {"type": "error", "error": {"type": "api_error", "message": msg}})
@@ -409,13 +412,13 @@ class Handler(BaseHTTPRequestHandler):
 
         # Live streaming path: translate upstream SSE incrementally.
         if live:
-            self._open_stream()
             try:
+                self._open_stream()
                 for chunk in stream_sse(resp, model):
                     self.wfile.write(chunk)
                 self.wfile.flush()
-            except BrokenPipeError:
-                pass
+            except (BrokenPipeError, ConnectionResetError):
+                log("client disconnected mid-stream (ignored)")
             finally:
                 resp.close()
             return
@@ -440,13 +443,13 @@ class Handler(BaseHTTPRequestHandler):
             log("synth-exc", repr(e))
             return self._err(502, f"response synthesis failed: {e!r}")
 
-        self._open_stream()
         try:
+            self._open_stream()
             for chunk in chunks:
                 self.wfile.write(chunk)
             self.wfile.flush()
-        except BrokenPipeError:
-            pass
+        except (BrokenPipeError, ConnectionResetError):
+            log("client disconnected mid-stream (ignored)")
 
 
 def main():
