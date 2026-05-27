@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  macOS launchd example. Edit the paths/keys, then:
+    cp examples/launchd-com.user.dsproxy.plist ~/Library/LaunchAgents/com.user.dsproxy.plist
+    launchctl load ~/Library/LaunchAgents/com.user.dsproxy.plist
+  Prefer not to hardcode the key here — point ProgramArguments at a wrapper
+  script that `source`s your secrets file instead (see the commented variant).
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.user.dsproxy</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/ABSOLUTE/PATH/TO/deepseek-reasoning-proxy/proxy.py</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>OPENROUTER_API_KEY</key>
+    <string>REPLACE_WITH_YOUR_KEY_OR_USE_A_WRAPPER</string>
+    <key>PROXY_PORT</key>
+    <string>11434</string>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/tmp/dsproxy.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/dsproxy.log</string>
+</dict>
+</plist>

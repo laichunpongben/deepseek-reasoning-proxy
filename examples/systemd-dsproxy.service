@@ -1,0 +1,18 @@
+# Linux systemd (user) example. Edit paths/key, then:
+#   mkdir -p ~/.config/systemd/user
+#   cp examples/systemd-dsproxy.service ~/.config/systemd/user/dsproxy.service
+#   systemctl --user daemon-reload && systemctl --user enable --now dsproxy
+# Prefer an EnvironmentFile (chmod 600) over inline Environment= for the key.
+[Unit]
+Description=deepseek-reasoning-proxy
+After=network-online.target
+
+[Service]
+# EnvironmentFile=%h/.config/dsproxy.env      # contains OPENROUTER_API_KEY=...
+Environment=OPENROUTER_API_KEY=REPLACE_OR_USE_ENVIRONMENTFILE
+Environment=PROXY_PORT=11434
+ExecStart=/usr/bin/python3 /ABSOLUTE/PATH/TO/deepseek-reasoning-proxy/proxy.py
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
