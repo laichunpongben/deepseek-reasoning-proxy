@@ -5,6 +5,12 @@ on:
     branches: [main]
   pull_request:
 
+env:
+  # Run JS actions (checkout, setup-python) on Node 24 — Node 20 is deprecated
+  # (forced default June 2026, removed from runners Sept 2026). Version-agnostic;
+  # no action-major bumps to track. Matches the steam game repos.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
