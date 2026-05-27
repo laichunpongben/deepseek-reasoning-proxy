@@ -51,13 +51,13 @@ git clone https://github.com/laichunpongben/deepseek-reasoning-proxy
 cd deepseek-reasoning-proxy
 
 export OPENROUTER_API_KEY=sk-or-...           # your OpenRouter key
-python3 proxy.py                               # listens on 127.0.0.1:11434
+python3 proxy.py                               # listens on 127.0.0.1:11456
 ```
 
 Point your client at it:
 
 ```bash
-export ANTHROPIC_BASE_URL="http://127.0.0.1:11434"
+export ANTHROPIC_BASE_URL="http://127.0.0.1:11456"
 export ANTHROPIC_AUTH_TOKEN="unused-proxy-ignores-it"   # clients require *a* value; the proxy ignores it
 # then run your Anthropic-format client (e.g. Claude Code)
 ```
@@ -71,7 +71,7 @@ That's it. Tool calls now round-trip — DeepSeek-V4 + native cache + tool use.
 | `OPENROUTER_API_KEY` | *(required)* | forwarded as `Bearer` to the upstream |
 | `PROXY_MODEL` | `deepseek/deepseek-v4-flash` | model sent upstream (overrides the client's) |
 | `PROXY_PROVIDER_ONLY` | `deepseek` | `provider {only:[…]}` pin; set empty to disable |
-| `PROXY_PORT` | `11434` | localhost port (note: collides with Ollama's default) |
+| `PROXY_PORT` | `11456` | localhost port (11434 is Ollama's default, so this avoids it) |
 | `PROXY_UPSTREAM` | `https://openrouter.ai/api/v1/chat/completions` | OpenAI-format endpoint |
 | `PROXY_STREAM_UPSTREAM` | `0` | `1` = true token-by-token streaming; `0` = buffered upstream + synthesized SSE (keeps accurate usage + cache-read telemetry) |
 

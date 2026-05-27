@@ -22,7 +22,7 @@
     <key>OPENROUTER_API_KEY</key>
     <string>REPLACE_WITH_YOUR_KEY_OR_USE_A_WRAPPER</string>
     <key>PROXY_PORT</key>
-    <string>11434</string>
+    <string>11456</string>
   </dict>
 
   <key>RunAtLoad</key>

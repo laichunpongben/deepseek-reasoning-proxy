@@ -38,7 +38,7 @@ Env
   OPENROUTER_API_KEY      (required)  forwarded as Bearer to the upstream
   PROXY_MODEL             default deepseek/deepseek-v4-flash   (forces the model)
   PROXY_PROVIDER_ONLY     default deepseek    (provider {only:[...]}; empty = no pin)
-  PROXY_PORT              default 11434
+  PROXY_PORT              default 11456
   PROXY_UPSTREAM          default https://openrouter.ai/api/v1/chat/completions
   PROXY_STREAM_UPSTREAM   default 0   (1 = true token-by-token streaming; 0 =
                           non-streaming upstream + synthesized SSE, which keeps
@@ -58,7 +58,7 @@ ONLY = os.environ.get("PROXY_PROVIDER_ONLY", "deepseek")
 KEY = os.environ.get("OPENROUTER_API_KEY", "")  # NOT a fallback to inbound client auth:
 # clients send a dummy Authorization to the proxy; falling back to it would mask a
 # missing OPENROUTER_API_KEY (server starts "OK" but every upstream call 401s).
-PORT = int(os.environ.get("PROXY_PORT", "11434"))
+PORT = int(os.environ.get("PROXY_PORT", "11456"))
 STREAM_UPSTREAM = os.environ.get("PROXY_STREAM_UPSTREAM", "0") not in ("0", "", "false", "no")
 
 STOP_MAP = {"stop": "end_turn", "tool_calls": "tool_use", "length": "max_tokens",
